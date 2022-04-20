@@ -1,11 +1,12 @@
 import React, {useContext} from 'react';
-import { StyleSheet, Pressable, Text, TextInput, View, FlatList, ScrollView} from 'react-native';
+import { StyleSheet, Pressable, Text, View, FlatList} from 'react-native';
 import { AppContext } from '../context'
 
 export default function listaProdutos(){
     const { produtos } = useContext(AppContext)
     const { dispatchProdutoEvent } = useContext(AppContext)
     const {listaIdsDeletados} = useContext(AppContext)
+
     function deletarItem(id){
         dispatchProdutoEvent('REMOVER_PRODUTO', {produtoId: id})
         console.log(listaIdsDeletados)
@@ -28,7 +29,23 @@ export default function listaProdutos(){
     }
 
     function ordenarLista(atributo){
-        dispatchProdutoEvent('ORDENAR_PRODUTOS', {atributo: atributo})
+        dispatchProdutoEvent('ORDENAR_PRODUTOS', {atributo: atributo.atributo})
+    }
+
+    const Titulo = () => {
+        return(
+            <View style={styles.tituloContainer}><Text style={styles.textoTitulo}>Produtos</Text></View>
+        )
+    }  
+
+    const BotaoOrdenar = (atributo, label) => {
+        return(
+            <Pressable atributo={atributo} label={label} onPress={() => ordenarLista(atributo)} style={styles.itemCabecalho}>
+                    <Text style={styles.textoItemCabecalho}>
+                        {atributo.label}
+                    </Text>
+            </Pressable>
+        )
     }
 
     const Item = ({ nome, quantidade, valor, valorTotal, id, filtrado }) => (
@@ -49,12 +66,6 @@ export default function listaProdutos(){
           <Text style={styles.textoItem}>Id: {id}</Text>
         </View>
       );
-     
-    const Titulo = () => {
-        return(
-            <View style={styles.tituloContainer}><Text style={styles.textoTitulo}>Produtos</Text></View>
-        )
-    }  
 
     const renderItem = ({ item }) => (
         <Item filtrado={item.filtrado} nome={item.nome} valor={item.valor} quantidade={item.quantidade} valorTotal = {item.valorTotal} id={item.id}/>
@@ -62,27 +73,11 @@ export default function listaProdutos(){
 
     return(
         <>
-        <View style={styles.cabecalho}>
-                <Pressable onPress={() => ordenarLista('nome')} style={styles.itemCabecalho}>
-                    <Text style={styles.textoItemCabecalho}>
-                        Nome
-                    </Text>
-                </Pressable>
-                <Pressable onPress={() => ordenarLista('quantidade')} style={styles.itemCabecalho}>
-                    <Text style={styles.textoItemCabecalho}>
-                        Quantidade
-                    </Text>
-                </Pressable>
-                <Pressable onPress={() => ordenarLista('valor')} style={styles.itemCabecalho}>
-                    <Text style={styles.textoItemCabecalho}>
-                        Valor do produto
-                    </Text>
-                </Pressable>
-                <Pressable onPress={() => ordenarLista('valorTotal')} style={styles.itemCabecalho}>
-                    <Text style={styles.textoItemCabecalho}>
-                        Valor Total
-                    </Text>
-                </Pressable>
+            <View style={styles.cabecalho}>
+                    <BotaoOrdenar atributo={'nome'} label='Nome'/>
+                    <BotaoOrdenar atributo={'quantidade'} label='Quantidade'/>
+                    <BotaoOrdenar atributo={'valor'} label='Valor do Produto'/>
+                    <BotaoOrdenar atributo={'valorTotal'} label='Valor Total' />
             </View>
 
             <FlatList
@@ -91,6 +86,7 @@ export default function listaProdutos(){
             keyExtractor={(item) => item.id} 
             ListHeaderComponent={Titulo}
             style={styles.listaProdutos}
+            scrollEnabled={false}
             />
         </>
     )

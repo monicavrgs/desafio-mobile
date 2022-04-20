@@ -42,9 +42,8 @@ export default function App() {
   }
 
   return (
-        // <SafeAreaView   styles={styles.statusBar}>
+        <SafeAreaView   styles={styles.statusBar}>
           <ScrollView style={styles.container}>
-
             <StatusBar  style={{backgroundColor: 'pink'}}/>
             <AppContext.Provider value ={{produtos, dispatchProdutoEvent, listaIdsDeletados}}>
               <Busca/>
@@ -53,7 +52,7 @@ export default function App() {
             </AppContext.Provider>
           </ScrollView>
 
-        // </SafeAreaView>    
+        </SafeAreaView>    
   );
 }
 

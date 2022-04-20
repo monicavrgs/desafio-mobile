@@ -52,7 +52,7 @@ export default function Form() {
             produto.filtrado = true
 
             dispatchProdutoEvent('ADICIONAR_PRODUTO', {produto: produto, id: produto.id})
-            
+
             setProduto({
                 nome: '',
                 quantidade: '',
